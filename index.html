@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AHA | Hackathon</title>
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <!-- <link href="css/styleO.css" rel="stylesheet"> -->
+
+    <!-- <link href="css/modern.css" rel="stylesheet"> -->
+    <script src="https://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
+    <link rel="stlesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/js/all.min.js"></script>
+    <script src="https://github.com/susielu/d3-legend/blob/master/d3-legend.js"></script>    
+    <!-- <script src="Library/d3-legend.js"></script>
+    <script src="Library/d3-legend.min.js"></script> -->
+    <script src="d3.min.js"></script>
+    <script src="d3.js"></script>
+    <script src="topojson.js"></script>
+    <script src="topojson.min.js"></script>
+    <!-- <script type="module" src="Code/MainCode.js"></script> -->
+  </head>
+  <body>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <img src="images/color-with-R-core-horizontal.png" class="img-responsive" alt="UAB"> -->
+          <!-- <a class="navbar-brand" href="#">AdminStrap</a> -->
+  </div>
+  <div id="navbar" class="collapse navbar-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Overview</a></li>
+      <li><a href="#">Analysis & Results</a></li>
+      <li><a href="#">About Us</a></li>
+    </ul>
+  </div><!--/.nav-collapse --> 
+</nav>
+
+<header id="header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>COVID-19 & County-Level Social determinants of Health</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="main">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <ul class="nav flex-column flex-nowrap overflow-hidden">
+          <li class="sidebar-item active">
+            <a href="index.html" class="list-group-item active main-color-bg">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Dashboard
+            </a>
+          <li class="nav-item">
+            <a class="nav-link text-truncate" href="#"><i class="fa fa-home"></i> <span class="d-none d-sm-inline">County Visualization</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed text-truncate" href="index.html" data-toggle="collapse" data-target="#UnModimenu1"><i class="fa fa-table"></i> 
+            <span class="d-none d-sm-inline">Exploration</span></a>
+              <div class="collapse" id="UnModimenu1" aria-expanded="false">
+                <ul class="flex-column pl-2 nav">
+                    <li class="nav-item" onclick="show_SDOH()"><a class="nav-link py-0" href="#"><span>Traditional Conties</span></a></li>
+                    <li class="nav-item" onclick="show_INF()"><a class="nav-link py-0" href="#"><span>Modified Conties</span></a></li>
+                </ul>
+              </div>
+          </li>
+          <li class="nav-item" onclick="show_INF()">
+            <!-- <a class="nav-link collapsed text-truncate" href="Simulation.html" data-target="#Modimenu1"><i class="fa fa-table"></i>  -->
+            <a class="nav-link collapsed text-truncate" href="Simulation.html"><i class="fa fa-table"></i> 
+            <span class="d-none d-sm-inline">Simulation </span></a>
+            </li>
+          </li>
+        </ul>
+        <div class="panel-body border alert-info" >
+          <h2 class="panel-title">United States</h2>
+            <div class="panel-heading">
+                <!-- <h2 class="panel-title">United States</h2> -->
+              <div class="well dash-box">
+                <!-- class="glyphicon glyphicon-stats" aria-hidden="true" -->
+                <h2><span id='C_Cases' style="color:orange"></span></h2>
+                <h4>Confirmed Cases</h4>
+              </div>
+              <div class="well dash-box">
+                <!-- class="glyphicon glyphicon-stats" aria-hidden="true"  -->
+                <h2><span id='D_Cases' style="color:red"></span></h2>
+                <h4>Deaths</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="col-md-10">
+            <div class="panel-heading main-color-bg">
+              <h3 class="panel-title">Covid-19 Graphs</h3>
+            </div>
+          <div class="panel-body">
+          <div class="col-md-7">
+            <div class="panel-heading">
+            <h3 class="panel-title">Chloropeth Map</h3>
+          </div>
+            <div class="card flex-fill w-500">
+              <div id="Covid_map" class="Covid_Map dash-box"></div>
+            </div>
+            <div class="panel-body">
+              <!-- Default inline 1-->
+              <div class="btn-group btn-group-toggle col-md-4">
+                <label class="btn btn-primary active" for="defaultInline1">
+                <input type="radio" class="custom-control-input" id="defaultInline1" name="modeR" onclick="radioMode()">  Confirmed Cases
+              </label>
+              </div>
+
+              <!-- Default inline 2-->
+              <div class="btn-group btn-group-toggle col-md-4">
+                <label class="btn btn-primary" for="defaultInline2">
+                  <input type="radio" class="custom-control-input" id="defaultInline2" name="modeR" onclick="radioMode()">  Confirmed Deaths
+                </label>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="range-wrap">
+                <div class="range-value" id="rangeV"></div>
+                <input id="slider" type="range" min="0" max="270" value="0" step="1">
+                <input id="ex7-enabled" type="checkbox" checked/> Enable <br>                
+              </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="panel-heading">
+            <h3 class="panel-title">United States</h3>
+            <h2 id=placeTitle></h2>
+            <h4 id=Cluster_Name></h3>
+          </div>
+          <div class="Auto_C">
+            <form autocomplete="off" action="/index.html">
+              <div class="autocomplete" style="width:300px;">
+                <input id="myInput" type="text" name="myCountry" placeholder="Search..." oninput="Auto_Complete()">
+              </div>
+              <!-- <input type="submit"> -->
+            </form>
+          </div>
+          <br>
+            <div>
+              <div id="Dynamic_Line_Graph" class="Dynamic_Line_Graph dash-box"></div>
+            </div>
+            <!-- data-toggle="buttons" -->
+            <div class="card flex-fill center-block">
+              <div id="CasesButton" class="btn-group btn-group-toggle">
+                <label class="btn btn-primary active">
+                  <input type="radio" name="Cases_Type" id="Cases" autocomplete="off" onclick="Case_type()" checked > Confirmed Cases
+                </label>
+                <label class="btn btn-primary">
+                <input type="radio" name="Cases_Type" id="Deaths" autocomplete="off" onclick="Case_type()"> Confirmed Deaths
+                </label>
+              </div>
+            </div>
+            <br>
+          <div>
+            <div id="MapButton" class="btn-group btn-group-toggle" >
+              <label class="btn btn-primary active">
+                <input type="radio" name="Map_S" id="Counties" autocomplete="on" checked onclick="Map_CS()"> County
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="Map_S" id="State" autocomplete="on" onclick="Map_CS()"> State
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="col-md-10">
+          <div class="panel-heading">
+            <h3 class="panel-title">Line Graphs</h3>
+          </div>
+            <div class="col-md-5">
+            <div class="card flex-fill">
+              <div id="Line_Graph1" class="Line_Graph1 dash-box"></div>
+            </div>
+            <div class="card flex-fill">
+              <div id="Line_Graph2" class="Line_Graph2 dash-box"></div>
+            </div>
+          </div>
+          <div class="col-md-5">
+              <div class="card flex-fill">
+              <div id="Line_Graph3" class="Line_Graph3 dash-box"></div>
+            </div>
+              <div class="card flex-fill">
+              <div id="Line_Graph4" class="Line_Graph4 dash-box"></div>
+            </div>
+          </div>
+          
+        </div>
+        </div>
+      </div>
+    </section>
+    <footer id="footer">
+      <p>Copyright to Our Team, &copy; 2020</p>
+    </footer>
+
+    <!-- Modals -->
+
+    <!-- Add Page -->
+    <div class="modal fade" id="addPage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Page</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Page Title</label>
+          <input type="text" class="form-control" placeholder="Page Title">
+        </div>
+        <div class="form-group">
+          <label>Page Body</label>
+          <textarea name="editor1" class="form-control" placeholder="Page Body"></textarea>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"> Published
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Meta Tags</label>
+          <input type="text" class="form-control" placeholder="Add Some Tags...">
+        </div>
+        <div class="form-group">
+          <label>Meta Description</label>
+          <input type="text" class="form-control" placeholder="Add Meta Description...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+  <script>
+     CKEDITOR.replace( 'editor1' );
+ </script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- <script src="https:/bootstrap.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="Code.js"></script>
+    <script>
+    </script>
+  </body>
+</html>
