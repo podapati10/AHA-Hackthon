@@ -1,7 +1,7 @@
 var Conf_Deaths = {}, Modi_Data={}, County_D = {}, County_Info, data_id ={}, County_Data, Combined_Data=[], date_c, d, dd, m, y, graph_date, dataset, range1, range2, rangeV1, rangeV2,
     Comb_databyid ={}, D_graph_date, Get_Date, Date_Cond1, Date_Cond2, line_fun, Y_hat, Y_Lower, Y_Upper, slider_val1, slider_val2, Flag=0, P_Flag=0, Temp_Date, Teamp_Rate, str,
     // val="Predictions of COVID-19 Mortality",
-    formatTime = d3.timeFormat("%B %d"), name, s1=0 ; 
+    formatTime = d3.timeFormat("%B %d"), name, s1; 
 
 let heightScale, data, values = [], xAxisScale, yAxisScale, width = 900, height = 400, padding = 40;
 
@@ -17,7 +17,7 @@ var svgg_Dynamic = svgDynamic.append('g')
     .attr('class', 'g_Dynamic')
     .attr('transform', 'translate(' + D_margin.left + ',' + (D_margin.top)+ ')');
 
-dropdown(s1);
+dropdown();
 
 function Load_Graph(str)
 {
@@ -44,12 +44,6 @@ function Load_Graph(str)
 }
 
 function dropdown(s1)
-{
-if(s1==0)
-{
-    window.alert("Select County")
-}
-else
 {
     s1 = document.getElementById(s1);
     var selectedConti = s1.options[s1.selectedIndex].value;
@@ -79,7 +73,6 @@ else
     {str=54049;}
 
     Load_Graph(str)
-}
 }  
 
 function Load_Dynamic_Graph()
