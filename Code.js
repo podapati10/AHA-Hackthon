@@ -17,7 +17,7 @@ var D_margin = {top: 10, right: 30, bottom: 30, left: 50},
 var counties, states,  countyInfo, SDOHbyid = {}, INFbyid = {}, State_Dataset, StateByid = {}, w = 20, h = 150, Tagg = 0, State_d = [], Map_S,
  Casesbyid = {}, Deathsbyid = {}, Conf_Cases = {}, Conf_Deaths= {}, radiusScale, radiusValue, centered, Flag, FlagType=0, Tag=0, C_width=1420, slider_val, state_data=[], 
  date_list=[], G_data=[], t, Map_Type, SubMap_Type, F_Date, ConfirmedCases_Dataset=[], ConfirmedDeaths_Dataset=[], StatesbyName = {}, quantizeScale,
- databyid=[], data_id ={}, count=0, d, m, y, check_date = null, date_c, date_cc, vl, dt, graph_date, S_graph_date;
+ databyid=[], data_id ={}, count=0, d, m, y, check_date = null, date_c, date_cc, vl, dt, graph_date, S_graph_date, clust_name;
 
 var slider_val, date, dat, dat2, day, month, year, render_date;
 
@@ -91,8 +91,7 @@ function Load_Graph()
     states.forEach(d => { Object.assign(d.properties, StatesbyName[+d.stname]);});
     counties.forEach(d => { Object.assign(d.properties, SDOHbyid[+d.id]);});
     counties.forEach(d => { Object.assign(d.properties, INFbyid[+d.id]);});
-    // counties.forEach(d => { Object.assign(d.properties, Casesbyid[+d.id]);});
-    // counties.forEach(d => { Object.assign(d.properties, Deathsbyid[+d.id]);});
+
     State_Dataset = State_Data;
     State_d =State;
     Tag=1;
@@ -189,10 +188,10 @@ function Load_State_Data()
      date_c = new Date;
      d = new Date(date_c.setDate(date_c.getDate()));
      dd = new Date(d.setDate(date_c.getDate()));
-     d = dd.getDate();
+     d = dd.getDate()-1;
      m = dd.getMonth()+1;
      y = dd.getYear();
-    var Curr_date = "20"+(y-100)+"-" + m +"-"+(d-1)
+    var Curr_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
     var Temp_Var1=[], s_v1 =[], s_v2 =[], Temp_Var3, Temp_Var4, Var1 = {}, y_R, yAxis_R, colorLegend;
 
     for( let i=0; i<State_d.length; i++)
@@ -474,8 +473,8 @@ dd = new Date(d.setDate(date_c.getDate()));
 d = dd.getDate();
 m = dd.getMonth()+1;
 y = dd.getYear();
-graph_date = m-+"/" + d +"/"+(y-100)
-S_graph_date = "20"+(y-100)+"-" + m +"-"+(d-1)
+graph_date = m+"/" + (d-2) +"/"+(y-100)
+S_graph_date = "20"+(y-100)+"-" + m +"-"+d
 Map_S = document.getElementsByName("Map_S");
 if(Map_S[0].checked)
 {
@@ -554,7 +553,7 @@ else if(Map_S[1].checked)
                 d = dd.getDate();
                 m = dd.getMonth()+1;
                 y = dd.getYear();
-                check_date = "20"+(y-100)+"-" + m +"-"+(d-1)
+                check_date = "20"+(y-100)+"-" + m +"-"+d
                 data_id ={State : State_Dataset[i].state, cases : State_Dataset[i]["cumulative_cases_per_100_000"], date :State_Dataset[i]["date"]}
                 databyid.push(data_id)
                 count=count+1;
@@ -579,10 +578,10 @@ else if(Map_S[1].checked)
                         date_c = new Date("Jan 22,2020");
                         d = new Date(date_c.setDate(date_c.getDate()));
                         dd = new Date(d.setDate(date_c.getDate()+count));
-                        d = dd.getDate();
+                        d = dd.getDate()-2;
                         m = dd.getMonth()+1;
                         y = dd.getYear();
-                        check_date = "20"+(y-100)+"-" + m +"-"+(d-1)
+                        check_date = "20"+(y-100)+"-" + m +"-"+d
                         data_id ={State : State_Dataset[i].state, cases : State_Dataset[i]["cumulative_deaths_per_100_000"],  date : State_Dataset[i]["date"]}
                         databyid.push(data_id)
                         count=count+1;
@@ -725,10 +724,10 @@ function Load_svgA(counties, states)
     date_c = new Date;
     d = new Date(date_c.setDate(date_c.getDate()));
     dd = new Date(d.setDate(date_c.getDate()));
-    d = ("0" + (dd.getDate() + 1)).slice(-2)
+    d = dd.getDate()-2
     m = dd.getMonth()+1;
     y = dd.getYear();
-    var Curr_date = "20"+(y-100)+"-" + m +"-"+(d-1)
+    var Curr_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
     var cnt=0, cnt1=0;
     for(let i=0; i<State_Dataset.length; i++)
     {
@@ -753,6 +752,7 @@ function Load_svgA(counties, states)
 
 function Load_SdohMap()
 {
+    console.log(counties)
     svgA_g.selectAll(".county").remove()
     svgA_g.selectAll(".state").remove()
     svgA_g.selectAll(".country-circle").remove()
@@ -793,11 +793,57 @@ function Load_SdohMap()
         .style("left", (d3.event.pageX - 350) + "px")
         .style("top", (d3.event.pageY - 300) + "px");
         if(Map_Type == "SDOH")
-        {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.trad_F_Cluster)
-        document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.trad_F_Cluster;}
+        {
+        if(parseInt(d.properties.trad_F_Cluster)== 0) 
+        {
+            clust_name = "Working Class"
+        }
+        if(parseInt(d.properties.trad_F_Cluster)== 1) 
+        {
+            clust_name = "Majorly White, Elderly"
+        }
+        if(parseInt(d.properties.trad_F_Cluster)== 2) 
+        {
+            clust_name = "Socioeconomically Disadvantaged"
+        }
+        if(parseInt(d.properties.trad_F_Cluster)== 3) 
+        {
+            clust_name = "Socioeconomically Advantaged"
+        }
+        if(parseInt(d.properties.trad_F_Cluster)== 4) 
+        {
+            clust_name = "Deprived Immigrant"
+        }
+        countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+clust_name)
+        document.getElementById("Cluster_Name").innerHTML = "Cluster : "+clust_name;}
         else if(Map_Type == "INF")
-        {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.mod_F_Cluster)
-        document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.mod_F_Cluster;}
+        {
+            if(parseInt(d.properties.mod_F_Cluster)== 0) 
+            {
+                clust_name = "Metropolitan Core"
+            }
+            if(parseInt(d.properties.mod_F_Cluster)== 1) 
+            {
+                clust_name = "Urban Working Class"
+            }
+            if(parseInt(d.properties.mod_F_Cluster)== 2) 
+            {
+                clust_name = "Socioeconomically Disadvantaged Disadvantaged with Poor Health"
+            }
+            if(parseInt(d.properties.mod_F_Cluster)== 3) 
+            {
+                clust_name = "Socioeconomically Advantaged"
+            }
+            if(parseInt(d.properties.mod_F_Cluster)== 4) 
+            {
+                clust_name = "Deprived Immigrant, Poor Health"
+            }    
+            if(parseInt(d.properties.mod_F_Cluster)== 5) 
+            {
+                clust_name = "Rural, White, Elderly"
+            }  
+        countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+clust_name)
+        document.getElementById("Cluster_Name").innerHTML = "Cluster : "+clust_name}
         Load_Dynamic(Math.floor(d.properties.FIPS));
     })
     .on('mouseout', function(d){d3.select(this).classed("selected", false).style("stroke-width", '0.2px').transition().duration(100)
@@ -808,144 +854,147 @@ function Load_SdohMap()
     
 }
 
-function Load_SubSdohMap()
-{
-    svgA_g.selectAll(".county").remove()
-    svgA_g.selectAll(".state").remove()
-    svgA_g.selectAll(".country-circle").remove()
-    Clear();
-    if(Map_Type == "Reg_SDOH")
-    {
-    svgA_g.selectAll(".county").data(counties).enter().append("path").attr("class", "county").attr("d", path)
-    .attr('fill', function(d){
-            if(SubMap_Type == "MW")
-        {
-            return clusterColor(d.properties.cluster_sdoh_MW)
-        }
-        else if(SubMap_Type == "NE")
-        {
-            return clusterColor(d.properties.cluster_sdoh_NE)
-        }
-        else if(SubMap_Type == "S")
-        {
-            return  clusterColor(d.properties.cluster_sdoh_SO)
-        }
-        else if(SubMap_Type == "W")
-        {
-            return clusterColor(d.properties.cluster_sdoh_WE)
-        }
-        })
-        .attr('cursor', 'pointer')
-        .on('click', function (d) { stateZoom(d) })
-        .on('mouseover', function(d)
-        {
-            d3.select(this).classed("selected", true)
-            countyInfo = d3.select("#Covid_map").append("div").attr("class", "county_content").style("opacity", 0); 
-            d3.select(this).style("stroke-width", 1).transition().duration(500);
-            countyInfo.style("opacity", 1.1)
-            .style("left", (d3.event.pageX - 300) + "px")
-            .style("top", (d3.event.pageY - 250) + "px");
-            if(SubMap_Type == "MW")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
-            else if(SubMap_Type == "NE")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
-            else if(SubMap_Type == "S")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
-            else if(SubMap_Type == "W")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
-            Load_Dynamic(d.properties.fips);
-        })
-        .on('mouseout', function(d){d3.select(this).classed("selected", false).style("stroke-width", '0.2px').transition().duration(100)
-        countyInfo.remove();
-        })
-    }
-    else if(Map_Type == "Reg_INF")
-    {
-        svgA_g.selectAll(".county").data(counties).enter().append("path").attr("class", "county").attr("d", path)
-        .attr('fill', function(d){
-        if(SubMap_Type == "MW")
-        {
-            return clusterColor(d.properties.cluster_inf_MW)
-        }
-        else if(SubMap_Type == "NE")
-        {
-            return clusterColor(d.properties.cluster_inf_NE)
-        }
-        else if(SubMap_Type == "S")
-        {
-            return  clusterColor(d.properties.cluster_inf_SO)
-        }
-        else if(SubMap_Type == "W")
-        {
-            return clusterColor(d.properties.cluster_inf_WE)
-        }
-        })
-        .attr('cursor', 'pointer')
-        .on('click', function (d) { stateZoom(d) })
-        .on('mouseover', function(d)
-        {
-            d3.select(this).classed("selected", true)
-            countyInfo = d3.select("#Covid_map").append("div").attr("class", "county_content").style("opacity", 0); 
-            d3.select(this).style("stroke-width", 1).transition().duration(500);
-            countyInfo.style("opacity", 1.1)
-            .style("left", (d3.event.pageX - 350) + "px")
-            .style("top", (d3.event.pageY - 300) + "px");
-            if(SubMap_Type == "MW")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
-            else if(SubMap_Type == "NE")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
-            else if(SubMap_Type == "S")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
-            else if(SubMap_Type == "W")
-            {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
-            document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
-            Load_Dynamic(d.properties.fips);
-        })
-        .on('mouseout', function(d){d3.select(this).classed("selected", false).style("stroke-width", '0.2px').transition().duration(100)
-        countyInfo.remove();
-        })
-    }
-    svgA_g.selectAll(".state").data(states).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "None")
-    svgA_g.call(d3.zoom().on('zoom', () => { d3.selectAll('.g_A').attr('transform', d3.event.transform);}));
+// function Load_SubSdohMap()
+// {
+//     svgA_g.selectAll(".county").remove()
+//     svgA_g.selectAll(".state").remove()
+//     svgA_g.selectAll(".country-circle").remove()
+//     Clear();
+//     if(Map_Type == "Reg_SDOH")
+//     {
+//     svgA_g.selectAll(".county").data(counties).enter().append("path").attr("class", "county").attr("d", path)
+//     .attr('fill', function(d){
+//             if(SubMap_Type == "MW")
+//         {
+//             return clusterColor(d.properties.cluster_sdoh_MW)
+//         }
+//         else if(SubMap_Type == "NE")
+//         {
+//             return clusterColor(d.properties.cluster_sdoh_NE)
+//         }
+//         else if(SubMap_Type == "S")
+//         {
+//             return  clusterColor(d.properties.cluster_sdoh_SO)
+//         }
+//         else if(SubMap_Type == "W")
+//         {
+//             return clusterColor(d.properties.cluster_sdoh_WE)
+//         }
+//         })
+//         .attr('cursor', 'pointer')
+//         .on('click', function (d) { stateZoom(d) })
+//         .on('mouseover', function(d)
+//         {
+//             d3.select(this).classed("selected", true)
+//             countyInfo = d3.select("#Covid_map").append("div").attr("class", "county_content").style("opacity", 0); 
+//             d3.select(this).style("stroke-width", 1).transition().duration(500);
+//             countyInfo.style("opacity", 1.1)
+//             .style("left", (d3.event.pageX - 300) + "px")
+//             .style("top", (d3.event.pageY - 250) + "px");
+//             if(SubMap_Type == "MW")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
+//             else if(SubMap_Type == "NE")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
+//             else if(SubMap_Type == "S")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
+//             else if(SubMap_Type == "W")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_sdoh_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;}
+//             Load_Dynamic(d.properties.fips);
+//         })
+//         .on('mouseout', function(d){d3.select(this).classed("selected", false).style("stroke-width", '0.2px').transition().duration(100)
+//         countyInfo.remove();
+//         })
+//     }
+//     else if(Map_Type == "Reg_INF")
+//     {
+//         svgA_g.selectAll(".county").data(counties).enter().append("path").attr("class", "county").attr("d", path)
+//         .attr('fill', function(d){
+//         if(SubMap_Type == "MW")
+//         {
+//             return clusterColor(d.properties.cluster_inf_MW)
+//         }
+//         else if(SubMap_Type == "NE")
+//         {
+//             return clusterColor(d.properties.cluster_inf_NE)
+//         }
+//         else if(SubMap_Type == "S")
+//         {
+//             return  clusterColor(d.properties.cluster_inf_SO)
+//         }
+//         else if(SubMap_Type == "W")
+//         {
+//             return clusterColor(d.properties.cluster_inf_WE)
+//         }
+//         })
+//         .attr('cursor', 'pointer')
+//         .on('click', function (d) { stateZoom(d) })
+//         .on('mouseover', function(d)
+//         {
+//             d3.select(this).classed("selected", true)
+//             countyInfo = d3.select("#Covid_map").append("div").attr("class", "county_content").style("opacity", 0); 
+//             d3.select(this).style("stroke-width", 1).transition().duration(500);
+//             countyInfo.style("opacity", 1.1)
+//             .style("left", (d3.event.pageX - 350) + "px")
+//             .style("top", (d3.event.pageY - 300) + "px");
+//             if(SubMap_Type == "MW")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
+//             else if(SubMap_Type == "NE")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
+//             else if(SubMap_Type == "S")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
+//             else if(SubMap_Type == "W")
+//             {countyInfo.html("County: "+d.properties.name+"<br/>"+"Cluster: "+d.properties.cluster_inf_name)
+//             document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;}
+//             Load_Dynamic(d.properties.fips);
+//         })
+//         .on('mouseout', function(d){d3.select(this).classed("selected", false).style("stroke-width", '0.2px').transition().duration(100)
+//         countyInfo.remove();
+//         })
+//     }
+//     svgA_g.selectAll(".state").data(states).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "None")
+//     svgA_g.call(d3.zoom().on('zoom', () => { d3.selectAll('.g_A').attr('transform', d3.event.transform);}));
     
-}
+// }
+
 function Trad_Legend()
 {
     svgA.selectAll(".legend_I").remove();
-    svgA.append("rect").attr("x", 100).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#7fc97f");
-    svgA.append("text").attr("x", 170).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Working Class").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 100).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#ffff99");
-    svgA.append("text").attr("x", 190).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Majorly White, Elderly").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 100).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#fdc086");
-    svgA.append("text").attr("x", 230).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Disadvantaged").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 270).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#beaed4");
-    svgA.append("text").attr("x", 390).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Advantaged").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 270).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#386cb0");
-    svgA.append("text").attr("x", 350).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Deprived Immigrant").attr("class", "legend_I")
+    svgA.selectAll(".legend_R").remove();
+    svgA.append("rect").attr("x", 100).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#7fc97f").attr("class", "legend_I");
+    svgA.append("text").attr("x", 165).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Working Class").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 100).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#ffff99").attr("class", "legend_I");
+    svgA.append("text").attr("x", 190).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Majorly White, Elderly").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 100).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#fdc086").attr("class", "legend_I");
+    svgA.append("text").attr("x", 220).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Disadvantaged").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 270).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#beaed4").attr("class", "legend_I");
+    svgA.append("text").attr("x", 380).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Advantaged").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 270).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#386cb0").attr("class", "legend_I");
+    svgA.append("text").attr("x", 350).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Deprived Immigrant").attr("class", "legend_I");
 }
 
 function Mod_Legend()
 {
     svgA.selectAll(".legend_I").remove();
-    svgA.append("rect").attr("x", 100).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#7fc97f");
-    svgA.append("text").attr("x", 180).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Metropolitan Core").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 100).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#ffff99");
-    svgA.append("text").attr("x", 190).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Urban Working Class").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 100).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#666666");
-    svgA.append("text").attr("x", 190).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Rural, White, Elderly").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 300).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#beaed4");
-    svgA.append("text").attr("x", 420).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Advantaged").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 300).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#386cb0");
-    svgA.append("text").attr("x", 430).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Deprived Immigrant, Poor Health").attr("class", "legend_I")
-    svgA.append("rect").attr("x", 300).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#fdc086");
-    svgA.append("text").attr("x", 490).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Disadvantaged with Poor Health").attr("class", "legend_I")
+    svgA.selectAll(".legend_R").remove();
+    svgA.append("rect").attr("x", 100).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#7fc97f").attr("class", "legend_R");
+    svgA.append("text").attr("x", 180).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Metropolitan Core").attr("class", "legend_R");
+    svgA.append("rect").attr("x", 100).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#ffff99").attr("class", "legend_R");
+    svgA.append("text").attr("x", 190).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Urban Working Class").attr("class", "legend_R");
+    svgA.append("rect").attr("x", 100).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#666666").attr("class", "legend_R");
+    svgA.append("text").attr("x", 190).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Rural, White, Elderly").attr("class", "legend_R");
+    svgA.append("rect").attr("x", 300).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#beaed4").attr("class", "legend_R");
+    svgA.append("text").attr("x", 415).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Advantaged").attr("class", "legend_R");
+    svgA.append("rect").attr("x", 300).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#386cb0").attr("class", "legend_R");
+    svgA.append("text").attr("x", 420).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Deprived Immigrant, Poor Health").attr("class", "legend_R");
+    svgA.append("rect").attr("x", 300).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#fdc086").attr("class", "legend_R");
+    svgA.append("text").attr("x", 470).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Disadvantaged with Poor Health").attr("class", "legend_R");
 }
 
 function show_SDOH()
@@ -1369,12 +1418,12 @@ function Load_Death_Circles()
 date_c = new Date;
 d = new Date(date_c.setDate(date_c.getDate()));
 dd = new Date(d.setDate(date_c.getDate()));
-d = dd.getDate();
+d = dd.getDate()-2;
 m = dd.getMonth()+1;
 y = dd.getYear();
-graph_date = m+"/" + (d-1) +"/"+(y-100)
+graph_date = m+"/" + d +"/"+(y-100)
 
-S_graph_date = "20"+(y-100)+"-" + m +"-"+(d-1)
+S_graph_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
 
 // counties.forEach(d => { Object.assign(d.properties, Conf_Deaths[+d.id]);});
 
@@ -1432,11 +1481,11 @@ function Load_Cases_Circles()
 date_c = new Date;
 d = new Date(date_c.setDate(date_c.getDate()));
 dd = new Date(d.setDate(date_c.getDate()));
-d = dd.getDate();
+d = dd.getDate()-1;
 m = dd.getMonth()+1;
 y = dd.getYear();
-graph_date = m+"/" + (d-1) +"/"+(y-100)
-S_graph_date = "20"+(y-100)+"-" + m +"-"+(d-1)
+graph_date = m+"/" + d +"/"+(y-100)
+S_graph_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
 
     // counties.forEach(d => { Object.assign(d.properties, Conf_Cases[+d.id]);});
 

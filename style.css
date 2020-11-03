@@ -17,13 +17,14 @@ body{
 .legend_I{
 	position:absolute;
 	left:550px;
-  top:250px;
+  top:250px; 
   font-size: 14px;
 }
 .legend_R{
 	position:absolute;
 	left:1290px;
-	top:250px;
+  top:250px;
+  font-size: 14px;
 }
 
 .label{
