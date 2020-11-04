@@ -11,7 +11,7 @@
     <!-- <link href="css/styleO.css" rel="stylesheet"> -->
 
     <!-- <link href="css/modern.css" rel="stylesheet"> -->
-    <script src="http://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
     <link rel="stlesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/js/all.min.js"></script>
     <script src="https://github.com/susielu/d3-legend/blob/master/d3-legend.js"></script>    
@@ -70,16 +70,18 @@
             <a class="nav-link text-truncate" href="#"><i class="fa fa-home"></i> <span class="d-none d-sm-inline">County Visualization</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link collapsed text-truncate" href="Dashboard_index.html"><i class="fa fa-table"></i> 
+            <a class="nav-link collapsed text-truncate" href="Dashboard_index.html" data-toggle="collapse" data-target="#UnModimenu1"><i class="fa fa-table"></i> 
             <span class="d-none d-sm-inline">Exploration</span></a>
               <div class="collapse" id="UnModimenu1" aria-expanded="false">
                 <ul class="flex-column pl-2 nav">
-                    <li class="nav-item" onclick="show_SDOH()"><a class="nav-link py-0" href="#"><span>Traditional Conties</span></a></li>
-                    <li class="nav-item" onclick="show_INF()"><a class="nav-link py-0" href="#"><span>Modified Conties</span></a></li>
+                    <li class="nav-item" onclick="show_SDOH()"><a class="nav-link py-0" href="#"><span>Traditional Counties</span></a></li>
+                    <li class="nav-item" onclick="show_INF()"><a class="nav-link py-0" href="#"><span>Modified Counties</span></a></li>
                 </ul>
               </div>
           </li>
-          <li class="nav-item">
+          <!-- onclick="show_INF()" -->
+          <li class="nav-item" >
+            <!-- <a class="nav-link collapsed text-truncate" href="Simulation.html" data-target="#Modimenu1"><i class="fa fa-table"></i>  -->
             <a class="nav-link collapsed text-truncate" href="Simulation.html"><i class="fa fa-table"></i> 
             <span class="d-none d-sm-inline">Simulation </span></a>
             </li>
@@ -88,11 +90,14 @@
         <div class="panel-body border alert-info" >
           <h2 class="panel-title">United States</h2>
             <div class="panel-heading">
+                <!-- <h2 class="panel-title">United States</h2> -->
               <div class="well dash-box">
+                <!-- class="glyphicon glyphicon-stats" aria-hidden="true" -->
                 <h2><span id='C_Cases' style="color:orange"></span></h2>
                 <h4>Confirmed Cases</h4>
               </div>
               <div class="well dash-box">
+                <!-- class="glyphicon glyphicon-stats" aria-hidden="true"  -->
                 <h2><span id='D_Cases' style="color:red"></span></h2>
                 <h4>Deaths</h4>
               </div>
@@ -104,64 +109,101 @@
               <h3 class="panel-title">Covid-19 Graphs</h3>
             </div>
           <div class="panel-body">
-          <div class="col-md-12">
+          <div class="col-md-7">
             <div class="panel-heading">
-            <h3 class="panel-title">Predictions of COVID-19 Mortality</h3>
+            <h3 class="panel-title">Chloropeth Map</h3>
           </div>
-          <div id="County_dd">
-            <label for="Counties">Choose a County:</label>
-            <select class="dropcls" id="Counties" onchange="dropdown(this.id)">
-            <option value="0">Select County</option>
-            <option value="1009">Blount County, AL</option>
-            <option value="1073">Jefferson County, AL</option>
-            <option value="1115">St. Clair County, AL</option>
-            <option value="1117">Shelby County, AL</option>
-            <option value="1131">Wilcox County, AL</option>
-            <option value="11001">Dist. of Columbia</option>
-            <option value="12001">Alachua County, FL</option>
-            <option value="12011">Broward County, FL</option>
-            <option value="12021">Collier County, FL</option>
-            <option value="12086">Miami-Dade County, FL</option>
-            <option value="42101">Philadelphia County, PA</option>
-            <option value="54049">Marion County, WV</option>
-            </select><br>
-        </div>
-        <div>
-          <h6>Our team is still working on means of deploying predictions for remaining counties.</h6>
-        </div>
-          <!-- <div class="Auto_C">
-            <form autocomplete="off" action="/Simulation.html">
-              <div class="autocomplete" style="width:300px;">
-                <input id="myInput" type="text" name="myCountry" placeholder="Search County.." oninput="Auto_Complete()">
+            <div class="card flex-fill w-500">
+              <div id="Covid_map" class="Covid_Map dash-box"></div>
+            </div>
+            <div class="panel-body">
+              <!-- Default inline 1-->
+              <div class="btn-group btn-group-toggle col-md-4">
+                <label class="btn btn-primary active" for="defaultInline1">
+                <input type="radio" class="custom-control-input" id="defaultInline1" name="modeR" onclick="radioMode()">  Confirmed Cases
+              </label>
               </div>
-              <input type="submit">
-            </form>
-          </div> -->
-        <div class="card flex-fill w-500">
-          <div class="panel-heading">
-            <h4 id=County_name></h4>
+
+              <!-- Default inline 2-->
+              <div class="btn-group btn-group-toggle col-md-4">
+                <label class="btn btn-primary" for="defaultInline2">
+                  <input type="radio" class="custom-control-input" id="defaultInline2" name="modeR" onclick="radioMode()">  Confirmed Deaths
+                </label>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="range-wrap">
+                <div class="range-value" id="rangeV"></div>
+                <input id="slider" type="range" min="0" max="270" value="0" step="1">
+                <input id="ex7-enabled" type="checkbox" checked/> Enable <br>                
+              </div>
           </div>
-            <div id="D_Graph" class="canvas dash-box"></div>
         </div>
-        <div class="panel-body">
-            <div class="range-wrap">
-              <div class="range-value" id="rangeV1"></div>
-              <input id="slider1" type="range" min="0" max="100" value="0" step="5">
-              <lable id="lbl_Case">(%) Increase in cases</lable>
-              <!-- <input id="ex7-enabled1" type="checkbox" checked/> Enable <br> -->
+        <div class="col-md-5">
+          <div class="panel-heading">
+            <h3 class="panel-title">United States</h3>
+            <h2 id=placeTitle></h2>
+            <h4 id=Cluster_Name></h3>
+          </div>
+          <div class="Auto_C">
+            <form autocomplete="off" action="/Dashboard_index.html">
+              <div class="autocomplete" style="width:300px;">
+                <input id="myInput" type="text" name="myCountry" placeholder="Search..." oninput="Auto_Complete()">
+              </div>
+              <!-- <input type="submit"> -->
+            </form>
+          </div>
+          <br>
+            <div>
+              <div id="Dynamic_Line_Graph" class="Dynamic_Line_Graph dash-box"></div>
             </div>
-        <!-- </div>
-        <div class="panel-body"> -->
-            <div class="range-wrap">
-              <div class="range-value" id="rangeV2"></div>
-              <input id="slider2" type="range" min="0" max="100" value="0" step="5">
-              <lable id="lbl_Test">(%) Increase in Tests</lable>
-              <!-- <input id="ex7-enabled2" type="checkbox" checked/> Enable <br> -->
+            <!-- data-toggle="buttons" -->
+            <div class="card flex-fill center-block">
+              <div id="CasesButton" class="btn-group btn-group-toggle">
+                <label class="btn btn-primary active">
+                  <input type="radio" name="Cases_Type" id="Cases" autocomplete="off" onclick="Case_type()" checked > Confirmed Cases
+                </label>
+                <label class="btn btn-primary">
+                <input type="radio" name="Cases_Type" id="Deaths" autocomplete="off" onclick="Case_type()"> Confirmed Deaths
+                </label>
+              </div>
             </div>
-        </div>
+            <br>
+          <div>
+            <div id="MapButton" class="btn-group btn-group-toggle" >
+              <label class="btn btn-primary active">
+                <input type="radio" name="Map_S" id="Counties" autocomplete="on" checked onclick="Map_CS()"> County
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="Map_S" id="State" autocomplete="on" onclick="Map_CS()"> State
+              </label>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+        </div>
+        <div class="col-md-10">
+          <div class="panel-heading">
+            <h3 class="panel-title">Line Graphs</h3>
+          </div>
+            <div class="col-md-5">
+            <div class="card flex-fill">
+              <div id="Line_Graph1" class="Line_Graph1 dash-box"></div>
+            </div>
+            <div class="card flex-fill">
+              <div id="Line_Graph2" class="Line_Graph2 dash-box"></div>
+            </div>
+          </div>
+          <div class="col-md-5">
+              <div class="card flex-fill">
+              <div id="Line_Graph3" class="Line_Graph3 dash-box"></div>
+            </div>
+              <div class="card flex-fill">
+              <div id="Line_Graph4" class="Line_Graph4 dash-box"></div>
+            </div>
+          </div>
+          
+        </div>
         </div>
       </div>
     </section>
@@ -220,10 +262,10 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="bootstrap.min.js"></script>
+    <!-- <script src="https:/bootstrap.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
-    <script src="LineGraph.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="Code.js"></script>
     <script>
     </script>
   </body>
