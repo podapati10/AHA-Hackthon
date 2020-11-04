@@ -17,7 +17,7 @@ var D_margin = {top: 10, right: 30, bottom: 30, left: 50},
 var counties, states,  countyInfo, SDOHbyid = {}, INFbyid = {}, State_Dataset, StateByid = {}, w = 20, h = 150, Tagg = 0, State_d = [], Map_S,
  Casesbyid = {}, Deathsbyid = {}, Conf_Cases = {}, Conf_Deaths= {}, radiusScale, radiusValue, centered, Flag, FlagType=0, Tag=0, C_width=1420, slider_val, state_data=[], 
  date_list=[], G_data=[], t, Map_Type, SubMap_Type, F_Date, ConfirmedCases_Dataset=[], ConfirmedDeaths_Dataset=[], StatesbyName = {}, quantizeScale,
- databyid=[], data_id ={}, count=0, d, m, y, check_date = null, date_c, date_cc, vl, dt, graph_date, S_graph_date, clust_name;
+ databyid=[], data_id ={}, count=0, d, m, y, check_date = null, date_c, date_cc, vl, dt, graph_date, S_graph_date, clust_name, Temp_Var3, Temp_Var4;
 
 var slider_val, date, dat, dat2, day, month, year, render_date;
 
@@ -138,6 +138,7 @@ function Case_type()
     }
     else if(Map_S[1].checked)
     {
+        Flag=1;
     Load_State_Data()
     }
     
@@ -169,6 +170,7 @@ if(Map_S[0].checked)
     }
 else if(Map_S[1].checked)
     {
+        svgA.selectAll(".legend_I").remove();
 var legend_S = svgA.append("defs").attr("class", "legend_S").append("svg:linearGradient").attr("id", "gradient1").attr("x1", "100%")
     .attr("y1", "0%").attr("x2", "100%").attr("y2", "100%").attr("spreadMethod", "pad");
     // legend_S.append("stop").attr("offset", "0%").attr("stop-color", S_highColor).attr("stop-opacity", 1);	
@@ -181,6 +183,8 @@ var legend_S = svgA.append("defs").attr("class", "legend_S").append("svg:linearG
 
 function Load_State_Data()
 {
+    document.getElementById("Cluster_Name").innerHTML = ""
+    console.log(State_Dataset)
     Clear();
     svgA_g.selectAll(".county").remove()
     svgA_g.selectAll(".state").remove()
@@ -188,11 +192,11 @@ function Load_State_Data()
      date_c = new Date;
      d = new Date(date_c.setDate(date_c.getDate()));
      dd = new Date(d.setDate(date_c.getDate()));
-     d = dd.getDate()-1;
+     d = dd.getDate()-2;
      m = dd.getMonth()+1;
      y = dd.getYear();
     var Curr_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
-    var Temp_Var1=[], s_v1 =[], s_v2 =[], Temp_Var3, Temp_Var4, Var1 = {}, y_R, yAxis_R, colorLegend;
+    var Temp_Var1=[], s_v1 =[], s_v2 =[], Var1 = {}, y_R, yAxis_R, colorLegend;
 
     for( let i=0; i<State_d.length; i++)
     {
@@ -258,10 +262,14 @@ function Load_State_Data()
     .style("top", (d3.event.pageY - 300) + "px");
     if(Tagg === 0)
     {countyInfo.html("State : "+d.properties.stname+"<br/>"+"Cases : "+ Temp_Var3)
+    svgg_Dynamic.selectAll(".D_title").remove()
+    svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Cases :"+ parseInt(Temp_Var3));
     // document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_sdoh_name;
 }
     else if(Tagg === 1)
     {countyInfo.html("State : "+d.properties.stname+"<br/>"+"Deaths: "+Temp_Var4)
+    svgg_Dynamic.selectAll(".D_title").remove()
+    svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Cases :"+ parseInt(Temp_Var4));
     // document.getElementById("Cluster_Name").innerHTML = "Cluster : "+d.properties.cluster_inf_name;
 }
     Load_Dynamic(d.properties.stname);
@@ -453,6 +461,7 @@ inp.addEventListener("input", function(e) {
 
 function Load_Dynamic(County_ID)
 {
+svgg_Dynamic.selectAll(".D_title").remove()
 data_id ={}, databyid= [];
 count=0
 var formatTime = d3.timeFormat("%B %d");
@@ -506,6 +515,7 @@ if(Map_S[0].checked)
                 } while(vl === parseInt(ConfirmedCases_Dataset[i][graph_date]))           
             }
         }
+        svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Cases :"+ parseInt(vl));
     }
     else
     {
@@ -534,6 +544,7 @@ if(Map_S[0].checked)
                     } while(vl === parseInt(ConfirmedDeaths_Dataset[i][graph_date]))           
                 }
             }
+            svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Deaths :"+ parseInt(vl));
     }
 }
 else if(Map_S[1].checked)
@@ -565,6 +576,7 @@ else if(Map_S[1].checked)
                 } while(S_graph_date=== State_Dataset[i].date && State_Dataset[i].state === County_ID)           
             }
         }
+        svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Cases :"+ parseInt(Temp_Var3));
         }
         else
         {
@@ -593,12 +605,12 @@ else if(Map_S[1].checked)
                     } while(S_graph_date=== State_Dataset[i].date && State_Dataset[i].state === County_ID)            
                     }
                 }
+                svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Deaths :"+ parseInt(Temp_Var4));
         }
     }
 svgg_Dynamic.selectAll(".D_Svg").remove()
 svgg_Dynamic.selectAll(".T_Axis").remove()
 svgg_Dynamic.selectAll(".D_Y").remove()
-svgg_Dynamic.selectAll(".D_title").remove()
 svgg_Dynamic.selectAll(".line_D").remove()
     var x = d3.scaleTime().range([0, D_width ]).domain(d3.extent(databyid, function(d) {
         dt = new Date(d.date);
@@ -623,15 +635,6 @@ svgg_Dynamic.append("path").data(databyid).attr("class", "line_D")
           .y0(y1(0))
           .y1(function(d) { return y1((parseInt(d.cases)))}))
          .attr("class","D_Svg") 
-         
-    if(FlagType==0)
-    {
-        svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Cases :"+ parseInt(vl));
-    }
-    else
-    {
-        svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Deaths :"+ parseInt(vl));
-    }
     
 var mouseG = svgg_Dynamic.append("g").attr("class", "mouse-over-effects").attr('transform', 'translate(0,0)');
 
@@ -752,7 +755,6 @@ function Load_svgA(counties, states)
 
 function Load_SdohMap()
 {
-    console.log(counties)
     svgA_g.selectAll(".county").remove()
     svgA_g.selectAll(".state").remove()
     svgA_g.selectAll(".country-circle").remove()
@@ -828,7 +830,7 @@ function Load_SdohMap()
             }
             if(parseInt(d.properties.mod_F_Cluster)== 2) 
             {
-                clust_name = "Socioeconomically Disadvantaged Disadvantaged with Poor Health"
+                clust_name = "Socioeconomically Disadvantaged with Poor Health"
             }
             if(parseInt(d.properties.mod_F_Cluster)== 3) 
             {
@@ -966,7 +968,6 @@ function Load_SdohMap()
 function Trad_Legend()
 {
     svgA.selectAll(".legend_I").remove();
-    svgA.selectAll(".legend_R").remove();
     svgA.append("rect").attr("x", 100).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#7fc97f").attr("class", "legend_I");
     svgA.append("text").attr("x", 165).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Working Class").attr("class", "legend_I");
     svgA.append("rect").attr("x", 100).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#ffff99").attr("class", "legend_I");
@@ -982,19 +983,18 @@ function Trad_Legend()
 function Mod_Legend()
 {
     svgA.selectAll(".legend_I").remove();
-    svgA.selectAll(".legend_R").remove();
-    svgA.append("rect").attr("x", 100).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#7fc97f").attr("class", "legend_R");
-    svgA.append("text").attr("x", 180).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Metropolitan Core").attr("class", "legend_R");
-    svgA.append("rect").attr("x", 100).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#ffff99").attr("class", "legend_R");
-    svgA.append("text").attr("x", 190).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Urban Working Class").attr("class", "legend_R");
-    svgA.append("rect").attr("x", 100).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#666666").attr("class", "legend_R");
-    svgA.append("text").attr("x", 190).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Rural, White, Elderly").attr("class", "legend_R");
-    svgA.append("rect").attr("x", 300).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#beaed4").attr("class", "legend_R");
-    svgA.append("text").attr("x", 415).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Advantaged").attr("class", "legend_R");
-    svgA.append("rect").attr("x", 300).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#386cb0").attr("class", "legend_R");
-    svgA.append("text").attr("x", 420).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Deprived Immigrant, Poor Health").attr("class", "legend_R");
-    svgA.append("rect").attr("x", 300).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#fdc086").attr("class", "legend_R");
-    svgA.append("text").attr("x", 470).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Disadvantaged with Poor Health").attr("class", "legend_R");
+    svgA.append("rect").attr("x", 100).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#7fc97f").attr("class", "legend_I");
+    svgA.append("text").attr("x", 180).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Metropolitan Core").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 100).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#ffff99").attr("class", "legend_I");
+    svgA.append("text").attr("x", 190).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Urban Working Class").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 100).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#666666").attr("class", "legend_I");
+    svgA.append("text").attr("x", 190).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Rural, White, Elderly").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 300).attr("y", 420).attr("width", 10).attr("height", 10).attr("fill","#beaed4").attr("class", "legend_I");
+    svgA.append("text").attr("x", 415).attr("y", 430).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Advantaged").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 300).attr("y", 440).attr("width", 10).attr("height", 10).attr("fill","#386cb0").attr("class", "legend_I");
+    svgA.append("text").attr("x", 420).attr("y", 450).style("text-anchor", "middle").attr("fill","Black").text("Deprived Immigrant, Poor Health").attr("class", "legend_I");
+    svgA.append("rect").attr("x", 300).attr("y", 460).attr("width", 10).attr("height", 10).attr("fill","#fdc086").attr("class", "legend_I");
+    svgA.append("text").attr("x", 470).attr("y", 470).style("text-anchor", "middle").attr("fill","Black").text("Socioeconomically Disadvantaged with Poor Health").attr("class", "legend_I");
 }
 
 function show_SDOH()
@@ -1470,7 +1470,7 @@ S_graph_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
   .on('mouseout', function(d){d3.select(this).classed("selected", false).style("stroke-width", '0.2px').transition().duration(100);
   countyInfo.remove();})
 
-  Load_Deaths()
+//   Load_Deaths()
 }
 
 function Load_Cases_Circles()
@@ -1537,7 +1537,7 @@ S_graph_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
   .on('mouseout', function(d){d3.select(this).classed("selected", false).style("stroke-width", '0.2px').transition().duration(100);
   countyInfo.remove();})
 
-Load_Cases()
+// Load_Cases()
 }
 
 function stateZoom(d) {
