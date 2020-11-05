@@ -97,6 +97,9 @@ function Load_Graph()
     Tag=1;
     ConfirmedDeaths_Dataset =CC_CDeaths;
     ConfirmedCases_Dataset = CC_CCases;
+    console.log(ConfirmedDeaths_Dataset)
+    console.log(ConfirmedCases_Dataset)
+    console.log(State_Dataset)
     counties.forEach(d => {
         d.properties.projected = projection(d3.geoCentroid(d));
     });    
@@ -192,10 +195,11 @@ function Load_State_Data()
      date_c = new Date;
      d = new Date(date_c.setDate(date_c.getDate()));
      dd = new Date(d.setDate(date_c.getDate()));
-     d = dd.getDate()-2;
+     d = dd.getDate()-1;
      m = dd.getMonth()+1;
      y = dd.getYear();
-    var Curr_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
+    var Curr_date = "20"+(y-100)+"-" + m +"-"+("0" + d).slice(-2)
+    console.log(Curr_date)
     var Temp_Var1=[], s_v1 =[], s_v2 =[], Var1 = {}, y_R, yAxis_R, colorLegend;
 
     for( let i=0; i<State_d.length; i++)
@@ -482,7 +486,7 @@ dd = new Date(d.setDate(date_c.getDate()));
 d = dd.getDate();
 m = dd.getMonth()+1;
 y = dd.getYear();
-graph_date = m+"/" + (d-2) +"/"+(y-100)
+graph_date = m+"/" + (d-1) +"/"+(y-100)
 S_graph_date = "20"+(y-100)+"-" + m +"-"+d
 Map_S = document.getElementsByName("Map_S");
 if(Map_S[0].checked)
@@ -590,7 +594,7 @@ else if(Map_S[1].checked)
                         date_c = new Date("Jan 22,2020");
                         d = new Date(date_c.setDate(date_c.getDate()));
                         dd = new Date(d.setDate(date_c.getDate()+count));
-                        d = dd.getDate()-2;
+                        d = dd.getDate()-1;
                         m = dd.getMonth()+1;
                         y = dd.getYear();
                         check_date = "20"+(y-100)+"-" + m +"-"+d
@@ -727,10 +731,11 @@ function Load_svgA(counties, states)
     date_c = new Date;
     d = new Date(date_c.setDate(date_c.getDate()));
     dd = new Date(d.setDate(date_c.getDate()));
-    d = dd.getDate()-2
+    d = dd.getDate()-1
     m = dd.getMonth()+1;
     y = dd.getYear();
-    var Curr_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
+    var Curr_date = "20"+(y-100)+"-" + m +"-"+("0" + d).slice(-2)
+    console.log(Curr_date)
     var cnt=0, cnt1=0;
     for(let i=0; i<State_Dataset.length; i++)
     {
@@ -1050,6 +1055,16 @@ function radioMode()
         counties.forEach(d => { Object.assign(d.properties, Conf_Cases[+d.id]);});
         Load_Cases_Circles(); 
         document.getElementById('slider').value = 0;
+        // document.getElementById('rangeV').value = 0;
+        const range = document.getElementById('slider');
+        range.addEventListener('input', setValue);
+        setValue = ()=>{
+            let newValue = Number(0), newPosition = 0;
+            rangeV.innerHTML = `<span>${""}</span>`;
+            rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+                };
+            document.addEventListener("DOMContentLoaded", setValue);
+            range.addEventListener('input', setValue);
     }
     else if(mode_R[1].checked)
     {
@@ -1057,6 +1072,14 @@ function radioMode()
         counties.forEach(d => { Object.assign(d.properties, Conf_Deaths[+d.id]);});
         Load_Death_Circles();
         document.getElementById('slider').value = 0;
+        // document.getElementById('rangeV').value = 0;
+        range.addEventListener('input', setValue);
+        setValue = ()=>{
+            let newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ), newPosition = 15 - (newValue * 0.3);
+            rangeV.innerHTML = `<span>${0}</span>`;
+            rangeV.style.left = `calc(${0}% + (${0}px))`;
+                };
+            document.addEventListener("DOMContentLoaded", setValue);
     }
 }
 
@@ -1418,7 +1441,7 @@ function Load_Death_Circles()
 date_c = new Date;
 d = new Date(date_c.setDate(date_c.getDate()));
 dd = new Date(d.setDate(date_c.getDate()));
-d = dd.getDate()-2;
+d = dd.getDate()-1;
 m = dd.getMonth()+1;
 y = dd.getYear();
 graph_date = m+"/" + d +"/"+(y-100)
@@ -1523,13 +1546,13 @@ S_graph_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
       countyInfo.style("opacity", 1.1);
       if(Map_Type=="SDOH")
       {
-        countyInfo.html("County : "+ (d.properties.Combined_Key).slice(0, -4)+ "<br/>" + "Cases : "+radiusValue(d)+ "<br/>"+d.properties.cluster_sdoh_name)
+        countyInfo.html("County : "+ (d.properties.Combined_Key).slice(0, -4)+ "<br/>" + "Cases : "+radiusValue(d))
         .style("left", (d3.event.pageX - 350) + "px")
         .style("top", (d3.event.pageY - 300) + "px");
       }
       else
       {
-        countyInfo.html("County : "+ (d.properties.Combined_Key).slice(0, -4)+ "<br/>" +"Cases : "+radiusValue(d)+ "<br/>"+d.properties.cluster_inf_name)
+        countyInfo.html("County : "+ (d.properties.Combined_Key).slice(0, -4)+ "<br/>" +"Cases : "+radiusValue(d))
         .style("left", (d3.event.pageX - 350) + "px")
         .style("top", (d3.event.pageY - 300) + "px");
       }
@@ -1570,6 +1593,7 @@ function stateZoom(d) {
 };
 
 d3.select("#slider").on("input", render_cases);
+
 function render_cases()
 {
     const range = document.getElementById('slider');

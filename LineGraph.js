@@ -181,8 +181,8 @@ Load_Dynamic_Graph()
 xAxisScale = d3.scaleTime().range([0, D_width]).domain(d3.extent(Combined_Data, function(d) {dt = new Date(d.Date);return dt;})); 
 yAxisScale = d3.scaleLinear().domain([0,d3.max(Combined_Data, function(d){ return parseFloat(d.Y_hat)})]).nice().range([D_height, 0])
 
-svgg_Dynamic.append("g").attr("transform", "translate(0," + D_height + ")").attr("class", "x-axis").call(d3.axisBottom(xAxisScale));
-svgg_Dynamic.append("g").attr("class","y-axis").call(d3.axisLeft(yAxisScale));
+svgg_Dynamic.append("g").attr("transform", "translate(0," + D_height + ")").attr("class", "x-axis").call(d3.axisBottom(xAxisScale))
+svgg_Dynamic.append("g").attr("class","y-axis").call(d3.axisLeft(yAxisScale))
 
 line_fun = d3.line()
     .x(function(d){dt = new Date(d.Date); return xAxisScale(dt);})
