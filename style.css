@@ -17,22 +17,24 @@ body{
 .legend_I{
 	position:absolute;
 	left:550px;
-  top:250px;
+  top:250px; 
   font-size: 14px;
 }
 .legend_R{
 	position:absolute;
 	left:1290px;
-	top:250px;
+  top:250px;
+  font-size: 14px;
 }
 
 .label{
   color:  #d90;
 }
 
-.axis text {
-  font: 10px sans-serif;
-}
+/* .axis text {
+  font: 20px sans-serif;
+} */
+
 
 .axis line, .axis path {
 fill: none;
@@ -55,7 +57,7 @@ text {
 }
 
 .tick text {
-  font-size: 0.5rem;
+  font-size: 1rem;
   fill: black;
 }
 
@@ -63,11 +65,15 @@ text {
   stroke: Black;
 }
 
-.axis-label {
-  font-size: 0.7em;
+/* .axis-label {
+  font-size: 10em;
   fill: black;
-}
+} */
 
+.x-axis text {
+  font-family: sans-serif;
+  font-size: 20px;
+}
 .title {
   font-size: 0.8em;
   fill:#1E6B52;
@@ -115,7 +121,7 @@ div.circle_content {
   position: absolute;
   text-align: center;
   width: 150px;
-  height: 80px;
+  height: 60px;
   padding: 2px;
   font: 12px sans-serif;
   background: rgba(255, 136, 0, 0.753);
