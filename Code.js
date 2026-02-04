@@ -490,7 +490,7 @@ dd = new Date(d.setDate(date_c.getDate()));
 d = dd.getDate();
 m = dd.getMonth()+1;
 y = dd.getYear();
-graph_date = m+"/" + (d-2) +"/"+(y-100)
+graph_date = "3/9/23";
 S_graph_date = "20"+(y-100)+"-" + m +"-"+d
 Map_S = document.getElementsByName("Map_S");
 if(Map_S[0].checked)
@@ -510,7 +510,7 @@ if(FlagType==0)
             d = dd.getDate();
             m = dd.getMonth()+1;
             y = dd.getYear();
-            check_date = m+"/" + d +"/"+(y-100)
+            check_date = "3/9/23";
             data_id ={id: Math.floor(ConfirmedCases_Dataset[i].FIPS), cases : ConfirmedCases_Dataset[i][check_date], date :check_date}
             vl =parseInt(ConfirmedCases_Dataset[i][graph_date])
 
@@ -540,7 +540,7 @@ else
                 d = dd.getDate();
                 m = dd.getMonth()+1;
                 y = dd.getYear();
-                check_date = m+"/" + d +"/"+(y-100)
+                check_date = "3/9/23";
                 data_id ={id: Math.floor(ConfirmedDeaths_Dataset[i].FIPS), cases : ConfirmedDeaths_Dataset[i][check_date], date :check_date}
                 vl =parseInt(ConfirmedDeaths_Dataset[i][graph_date])
                 databyid.push(data_id)
@@ -572,7 +572,7 @@ else if(Map_S[1].checked)
             d = dd.getDate();
             m = dd.getMonth()+1;
             y = dd.getYear();
-            check_date = "20"+(y-100)+"-" + m +"-"+d
+            check_date = "3/9/23";
             data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Confirmed"], date :State_Dataset[i]["Last_Update"]}
             databyid.push(data_id)
             count=count+1;
@@ -601,7 +601,7 @@ else if(Map_S[1].checked)
                     d = dd.getDate()-2;
                     m = dd.getMonth()+1;
                     y = dd.getYear();
-                    check_date = "20"+(y-100)+"-" + m +"-"+d
+                    check_date = "3/9/23";
                     data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Deaths"],  date : State_Dataset[i]["Last_Update"]}
                     databyid.push(data_id)
                     count=count+1;
@@ -1438,7 +1438,7 @@ dd = new Date(d.setDate(date_c.getDate()));
 d = dd.getDate()-2;
 m = dd.getMonth()+1;
 y = dd.getYear();
-graph_date = m+"/" + d +"/"+(y-100)
+graph_date = "3/9/23";
 
 S_graph_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
 
@@ -1501,7 +1501,7 @@ dd = new Date(d.setDate(date_c.getDate()));
 d = dd.getDate()-1;
 m = dd.getMonth()+1;
 y = dd.getYear();
-graph_date = m+"/" + d +"/"+(y-100)
+graph_date = "3/9/23";
 S_graph_date = "20"+(y-100)+"-" + m +"-"+("0" + (d + 1)).slice(-2)
 
 // counties.forEach(d => { Object.assign(d.properties, Conf_Cases[+d.id]);});
@@ -1808,5 +1808,6 @@ countyInfo.remove();})
 //     if (playing)
 //         setTimeout(step(), 100)
 //  }
+
 
 
