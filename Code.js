@@ -76,7 +76,7 @@ Promise.all([ d3.csv('us-state-ansi-fips.csv'),
 d3.json('us.json'),d3.csv('data_Final_Data_Traditional_Sdoh_Factors.csv'),d3.csv('data_Final_Data_Modified_Sdoh_Factors.csv'),
 d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'),
 d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv'),
-d3.csv('https://query.data.world/s/4u2fxporpsbahcsju3sbsfcee34dfm')
+d3.csv('03-09-2023.csv')
 ])
 .then(([State, Jdataset, T_SDOH_dataset, M_SDOH_dataset, CC_CCases, CC_CDeaths, State_Data]) => {
 T_SDOH_dataset.forEach(d => {SDOHbyid[d['fips']] = d;})
@@ -1808,3 +1808,4 @@ countyInfo.remove();})
 //     if (playing)
 //         setTimeout(step(), 100)
 //  }
+
