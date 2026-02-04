@@ -210,12 +210,12 @@ for( let i=0; i<State_d.length; i++)
 {
     for(let j =0; j<State_Dataset.length; j++)
     {
-        if(State_d[i]["stname"] === State_Dataset[j]["state"] && State_Dataset[j]["date"]===Curr_date)
+        if(State_d[i]["stname"] === State_Dataset[j]["Province_State"] && State_Dataset[j]["Last_Update"]==="2023-03-10 04:31:51")
         {
-                Var1= {State :State_Dataset[j]["state"], Cases : State_Dataset[j]["cumulative_cases_per_100_000"], Deaths : State_Dataset[j]["cumulative_deaths_per_100_000"], Date : State_Dataset[j]["date"]}
+                Var1= {State :State_Dataset[j]["Province_State"], Cases : State_Dataset[j]["Confirmed"], Deaths : State_Dataset[j]["Deaths"], Date : State_Dataset[j]["Last_Update"]}
                 Temp_Var1.push(Var1)
-                s_v1.push(parseFloat(State_Dataset[j]["cumulative_cases_per_100_000"]))
-                s_v2.push(parseFloat(State_Dataset[j]["cumulative_deaths_per_100_000"]))
+                s_v1.push(parseFloat(State_Dataset[j]["Confirmed"]))
+                s_v2.push(parseFloat(State_Dataset[j]["Deaths"]))
         } 
     }
 }  
@@ -561,9 +561,9 @@ else if(Map_S[1].checked)
     {
     for(let i=0; i<State_Dataset.length; i++)
     {
-    if(State_Dataset[i].state === County_ID)
+    if(State_Dataset[i].FIPS === County_ID)
         {    
-        document.getElementById("placeTitle").innerHTML = State_Dataset[i]["state"];
+        document.getElementById("placeTitle").innerHTML = State_Dataset[i]["Province_State"];
         do
             {
             date_c = new Date("Jan 22,2020");
@@ -573,15 +573,15 @@ else if(Map_S[1].checked)
             m = dd.getMonth()+1;
             y = dd.getYear();
             check_date = "20"+(y-100)+"-" + m +"-"+d
-            data_id ={State : State_Dataset[i].state, cases : State_Dataset[i]["cumulative_cases_per_100_000"], date :State_Dataset[i]["date"]}
+            data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Confirmed"], date :State_Dataset[i]["Last_Update"]}
             databyid.push(data_id)
             count=count+1;
-            if(S_graph_date=== State_Dataset[i].date && State_Dataset[i].state === County_ID)
+            if(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)
                 {
-                    vl =State_Dataset[i]["cumulative_cases_per_100_000"]
+                    vl =State_Dataset[i]["Confirmed"]
                 break;
                 }
-            } while(S_graph_date=== State_Dataset[i].date && State_Dataset[i].state === County_ID)           
+            } while(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)           
         }
     }
     svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Cases :"+ parseInt(Temp_Var3));
@@ -590,9 +590,9 @@ else if(Map_S[1].checked)
     {
         for(let i=0; i<State_Dataset.length; i++)
             {
-            if(State_Dataset[i]["state"] === County_ID)
+            if(State_Dataset[i]["FIPS"] === County_ID)
                 {    
-                document.getElementById("placeTitle").innerHTML = State_Dataset[i]["state"];
+                document.getElementById("placeTitle").innerHTML = State_Dataset[i]["Province_State"];
                 do
                     {
                     date_c = new Date("Jan 22,2020");
@@ -602,15 +602,15 @@ else if(Map_S[1].checked)
                     m = dd.getMonth()+1;
                     y = dd.getYear();
                     check_date = "20"+(y-100)+"-" + m +"-"+d
-                    data_id ={State : State_Dataset[i].state, cases : State_Dataset[i]["cumulative_deaths_per_100_000"],  date : State_Dataset[i]["date"]}
+                    data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Deaths"],  date : State_Dataset[i]["Last_Update"]}
                     databyid.push(data_id)
                     count=count+1;
-                    if(S_graph_date=== State_Dataset[i].date && State_Dataset[i].state === County_ID)
+                    if(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)
                     {
-                    vl =State_Dataset[i]["cumulative_deaths_per_100_000"]
+                    vl =State_Dataset[i]["Deaths"]
                     break;
                     }
-                } while(S_graph_date=== State_Dataset[i].date && State_Dataset[i].state === County_ID)            
+                } while(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)            
                 }
             }
             svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Deaths :"+ parseInt(Temp_Var4));
@@ -750,10 +750,10 @@ console.log(Curr_date)
 var cnt=0, cnt1=0;
 for(let i=0; i<State_Dataset.length; i++)
 {
-    if (Curr_date === State_Dataset[i]["date"]) 
+    if ("2023-03-10 04:31:51" === State_Dataset[i]["Last_Update"]) 
     {
-    cnt=cnt + parseInt(State_Dataset[i]["cumulative_cases"])
-    cnt1= cnt1 + parseInt(State_Dataset[i]["cumulative_deaths"])
+    cnt=cnt + parseInt(State_Dataset[i]["Confirmed"])
+    cnt1= cnt1 + parseInt(State_Dataset[i]["Deaths"])
     }
 }
 document.getElementById("C_Cases").innerHTML = cnt.toLocaleString();
@@ -1808,4 +1808,5 @@ countyInfo.remove();})
 //     if (playing)
 //         setTimeout(step(), 100)
 //  }
+
 
