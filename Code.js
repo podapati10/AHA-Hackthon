@@ -491,7 +491,7 @@ d = dd.getDate();
 m = dd.getMonth()+1;
 y = dd.getYear();
 graph_date = "3/9/23";
-S_graph_date = "3/9/23";
+S_graph_date = "2023-03-10 04:31:51";
 Map_S = document.getElementsByName("Map_S");
 if(Map_S[0].checked)
 {
@@ -1439,7 +1439,7 @@ d = dd.getDate()-2;
 m = dd.getMonth()+1;
 y = dd.getYear();
 graph_date = "3/9/23";
-S_graph_date = "3/9/23";
+S_graph_date = "2023-03-10 04:31:51";
 
 // counties.forEach(d => { Object.assign(d.properties, Conf_Deaths[+d.id]);});
 
@@ -1501,7 +1501,7 @@ d = dd.getDate()-1;
 m = dd.getMonth()+1;
 y = dd.getYear();
 graph_date = "3/9/23";
-S_graph_date = "3/9/23";
+S_graph_date = "2023-03-10 04:31:51";
 
 // counties.forEach(d => { Object.assign(d.properties, Conf_Cases[+d.id]);});
 
@@ -1807,6 +1807,7 @@ countyInfo.remove();})
 //     if (playing)
 //         setTimeout(step(), 100)
 //  }
+
 
 
 
