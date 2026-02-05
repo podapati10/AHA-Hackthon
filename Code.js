@@ -504,17 +504,13 @@ if(FlagType==0)
         document.getElementById("placeTitle").innerHTML = (ConfirmedCases_Dataset[i]["Combined_Key"]).slice(0, -4);
         do
             {
-                date_c = new Date("Jan 22, 2020");
-                dd = new Date(date_c);
-                dd.setDate(dd.getDate() + count - 2);
-                d = dd.getDate();
-                m = dd.getMonth() + 1;
-                y = dd.getFullYear();
-                check_date =
-                    y + "-" +
-                    String(m).padStart(2, "0") + "-" +
-                    String(d).padStart(2, "0");
-                
+                date_cc = new Date("Jan 22,2020");
+            d = new Date(date_cc.setDate(date_cc.getDate()));
+            dd = new Date(d.setDate(date_cc.getDate()+count));
+            d = dd.getDate();
+            m = dd.getMonth()+1;
+            y = dd.getYear();
+                check_date = m+"/" + d +"/"+(y-100);
             data_id ={id: Math.floor(ConfirmedCases_Dataset[i].FIPS), cases : ConfirmedCases_Dataset[i][check_date], date :check_date}
             vl =parseInt(ConfirmedCases_Dataset[i][graph_date])
 
@@ -538,16 +534,13 @@ else
             document.getElementById("placeTitle").innerHTML = (ConfirmedDeaths_Dataset[i]["Combined_Key"]).slice(0, -4);
             do
                 {
-                date_c = new Date("Jan 22, 2020");
-                dd = new Date(date_c);
-                dd.setDate(dd.getDate() + count - 2);
-                d = dd.getDate();
-                m = dd.getMonth() + 1;
-                y = dd.getFullYear();
-                check_date =
-                    y + "-" +
-                    String(m).padStart(2, "0") + "-" +
-                    String(d).padStart(2, "0");
+                date_cc = new Date("Jan 22,2020");
+            d = new Date(date_cc.setDate(date_cc.getDate()));
+            dd = new Date(d.setDate(date_cc.getDate()+count));
+            d = dd.getDate();
+            m = dd.getMonth()+1;
+            y = dd.getYear();
+                check_date = m+"/" + d +"/"+(y-100);
                 data_id ={id: Math.floor(ConfirmedDeaths_Dataset[i].FIPS), cases : ConfirmedDeaths_Dataset[i][check_date], date :check_date}
                 vl =parseInt(ConfirmedDeaths_Dataset[i][graph_date])
                 databyid.push(data_id)
@@ -573,16 +566,13 @@ else if(Map_S[1].checked)
         document.getElementById("placeTitle").innerHTML = State_Dataset[i]["Province_State"];
         do
             {
-            date_c = new Date("Jan 22, 2020");
-                dd = new Date(date_c);
-                dd.setDate(dd.getDate() + count - 2);
-                d = dd.getDate();
-                m = dd.getMonth() + 1;
-                y = dd.getFullYear();
-                check_date =
-                    y + "-" +
-                    String(m).padStart(2, "0") + "-" +
-                    String(d).padStart(2, "0");
+            date_cc = new Date("Jan 22,2020");
+            d = new Date(date_cc.setDate(date_cc.getDate()));
+            dd = new Date(d.setDate(date_cc.getDate()+count));
+            d = dd.getDate();
+            m = dd.getMonth()+1;
+            y = dd.getYear();
+                check_date = m+"/" + d +"/"+(y-100);
             data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Confirmed"], date :State_Dataset[i]["Last_Update"]}
             databyid.push(data_id)
             count=count+1;
@@ -605,16 +595,13 @@ else if(Map_S[1].checked)
                 document.getElementById("placeTitle").innerHTML = State_Dataset[i]["Province_State"];
                 do
                     {
-                    date_c = new Date("Jan 22, 2020");
-                    dd = new Date(date_c);
-                    dd.setDate(dd.getDate() + count - 2);
-                    d = dd.getDate();
-                    m = dd.getMonth() + 1;
-                    y = dd.getFullYear();
-                    check_date =
-                    y + "-" +
-                    String(m).padStart(2, "0") + "-" +
-                    String(d).padStart(2, "0");
+                    date_cc = new Date("Jan 22,2020");
+            d = new Date(date_cc.setDate(date_cc.getDate()));
+            dd = new Date(d.setDate(date_cc.getDate()+count));
+            d = dd.getDate();
+            m = dd.getMonth()+1;
+            y = dd.getYear();
+                    check_date = m+"/" + d +"/"+(y-100);
                     data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Deaths"],  date : State_Dataset[i]["Last_Update"]}
                     databyid.push(data_id)
                     count=count+1;
@@ -1821,5 +1808,6 @@ countyInfo.remove();})
 //     if (playing)
 //         setTimeout(step(), 100)
 //  }
+
 
 
