@@ -203,7 +203,7 @@ svgA_g.selectAll(".state").remove()
         {
             m;
         }
-var Curr_date = "2023-03-10";
+var Curr_date = "2023-03-10 04:31:51";
 var Temp_Var1=[], s_v1 =[], s_v2 =[], Var1 = {}, y_R, yAxis_R, colorLegend;
 
 for( let i=0; i<State_d.length; i++)
@@ -745,7 +745,7 @@ if(10 > m)
         {
             m;
         }
-var Curr_date = "2023-03-10";
+var Curr_date = "2023-03-10 04:31:51";
 console.log(Curr_date)
 var cnt=0, cnt1=0;
 for(let i=0; i<State_Dataset.length; i++)
@@ -1808,6 +1808,7 @@ countyInfo.remove();})
 //     if (playing)
 //         setTimeout(step(), 100)
 //  }
+
 
 
 
