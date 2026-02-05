@@ -561,7 +561,7 @@ else if(Map_S[1].checked)
     {
     for(let i=0; i<State_Dataset.length; i++)
     {
-    if(State_Dataset[i].FIPS === County_ID)
+    if(State_Dataset[i].Province_State === County_ID)
         {    
         document.getElementById("placeTitle").innerHTML = State_Dataset[i]["Province_State"];
         do
@@ -576,12 +576,12 @@ else if(Map_S[1].checked)
             data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Confirmed"], date :State_Dataset[i]["Last_Update"]}
             databyid.push(data_id)
             count=count+1;
-            if(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)
+            if(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].Province_State === County_ID)
                 {
                     vl =State_Dataset[i]["Confirmed"]
                 break;
                 }
-            } while(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)           
+            } while(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].Province_State === County_ID)           
         }
     }
     svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Cases :"+ parseInt(Temp_Var3));
@@ -590,7 +590,7 @@ else if(Map_S[1].checked)
     {
         for(let i=0; i<State_Dataset.length; i++)
             {
-            if(State_Dataset[i]["FIPS"] === County_ID)
+            if(State_Dataset[i]["Province_State"] === County_ID)
                 {    
                 document.getElementById("placeTitle").innerHTML = State_Dataset[i]["Province_State"];
                 do
@@ -605,12 +605,12 @@ else if(Map_S[1].checked)
                     data_id ={State : State_Dataset[i].Province_State, cases : State_Dataset[i]["Deaths"],  date : State_Dataset[i]["Last_Update"]}
                     databyid.push(data_id)
                     count=count+1;
-                    if(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)
+                    if(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].Province_State === County_ID)
                     {
                     vl =State_Dataset[i]["Deaths"]
                     break;
                     }
-                } while(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].FIPS === County_ID)            
+                } while(S_graph_date=== State_Dataset[i].Last_Update && State_Dataset[i].Province_State === County_ID)            
                 }
             }
             svgg_Dynamic.append('text').attr('class', 'D_title').attr('x', 30).attr('y', 28).text("Confirmed Deaths :"+ parseInt(Temp_Var4));
@@ -1808,6 +1808,7 @@ countyInfo.remove();})
 //     if (playing)
 //         setTimeout(step(), 100)
 //  }
+
 
 
 
